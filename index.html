@@ -112,6 +112,8 @@
       text-decoration: none; display: inline-block;
     }
     .card-link-btn:hover { background: var(--teal); color: var(--white); }
+    .card-link-plan { border-color: #3949ab; color: #3949ab; }
+    .card-link-plan:hover { background: #3949ab; border-color: #3949ab; color: var(--white); }
 
     /* ── Add Project banner ── */
     .add-banner {
@@ -446,7 +448,9 @@ const PROJECTS = [
     status: 'planned',
     date: '2026',
     github: '',
-    demo: ''
+    demo: '',
+    planEN: 'AI_Detection_Project_Plan_EN.pdf',
+    planRU: 'AI_Detection_Project_Plan.pdf'
   }
 ];
 // ═══════════════════════════════════════════════════════════════════════════
@@ -465,9 +469,11 @@ function badgeHTML(status) {
 }
 
 function cardHTML(p) {
-  const tags   = p.tags.map(t => `<span class="tag">${t}</span>`).join('');
-  const ghBtn  = p.github ? `<a href="${p.github}" target="_blank" class="card-link-btn">GitHub</a>` : '';
-  const demoBtn = p.demo  ? `<a href="${p.demo}"   target="_blank" class="card-link-btn">Demo</a>`   : '';
+  const tags    = p.tags.map(t => `<span class="tag">${t}</span>`).join('');
+  const ghBtn   = p.github  ? `<a href="${p.github}"  target="_blank" class="card-link-btn">GitHub</a>` : '';
+  const demoBtn = p.demo    ? `<a href="${p.demo}"    target="_blank" class="card-link-btn">Demo</a>`   : '';
+  const planENBtn = p.planEN ? `<a href="${p.planEN}" target="_blank" class="card-link-btn card-link-plan">📄 Plan (EN)</a>` : '';
+  const planRUBtn = p.planRU ? `<a href="${p.planRU}" target="_blank" class="card-link-btn card-link-plan">📄 План (RU)</a>` : '';
   return `
     <div class="project-card" data-status="${p.status}">
       <div class="card-header">
@@ -478,7 +484,7 @@ function cardHTML(p) {
       <div class="card-tags">${tags}</div>
       <div class="card-footer">
         <span class="card-date">${p.date || ''}</span>
-        <div class="card-links">${ghBtn}${demoBtn}</div>
+        <div class="card-links">${ghBtn}${demoBtn}${planENBtn}${planRUBtn}</div>
       </div>
     </div>`;
 }
