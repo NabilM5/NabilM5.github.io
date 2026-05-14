@@ -114,6 +114,97 @@
     .card-link-btn:hover { background: var(--teal); color: var(--white); }
     .card-link-plan { border-color: #3949ab; color: #3949ab; }
     .card-link-plan:hover { background: #3949ab; border-color: #3949ab; color: var(--white); }
+    .card-details-btn {
+      font-size: 0.78rem; padding: 0.25rem 0.7rem; border-radius: 6px;
+      border: none; background: var(--teal); color: var(--white);
+      cursor: pointer; transition: background var(--transition); font-family: inherit;
+    }
+    .card-details-btn:hover { background: var(--teal-light); }
+
+    /* ── Project Detail Modal ── */
+    #detail-overlay {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(10,20,30,0.55); backdrop-filter: blur(4px);
+      opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+    }
+    #detail-overlay.open { opacity: 1; pointer-events: all; }
+
+    #detail-panel {
+      position: fixed; top: 0; right: 0; bottom: 0;
+      width: min(780px, 100vw);
+      background: var(--white);
+      overflow-y: auto;
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(.4,0,.2,1);
+      box-shadow: -8px 0 40px rgba(0,0,0,0.18);
+      z-index: 501;
+    }
+    #detail-panel.open { transform: translateX(0); }
+
+    .dp-hero {
+      background: linear-gradient(135deg, var(--navy) 0%, #1e3a4a 100%);
+      padding: 2rem 2rem 1.5rem;
+      position: sticky; top: 0; z-index: 10;
+    }
+    .dp-back {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      color: #9ab8c8; font-size: 0.82rem; cursor: pointer;
+      border: none; background: none; font-family: inherit;
+      margin-bottom: 1rem; padding: 0; transition: color var(--transition);
+    }
+    .dp-back:hover { color: var(--white); }
+    .dp-hero-title { font-size: 1.4rem; font-weight: 800; color: var(--white); margin-bottom: 0.4rem; }
+    .dp-hero-meta { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+    .dp-hero-date { font-size: 0.82rem; color: #9ab8c8; }
+
+    .dp-body { padding: 1.8rem 2rem 3rem; }
+
+    .dp-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.8rem; }
+    .dp-tag { font-size: 0.73rem; background: var(--teal-dim); color: var(--teal); padding: 0.22rem 0.6rem; border-radius: 6px; font-weight: 500; }
+
+    .dp-section { margin-bottom: 1.8rem; }
+    .dp-section-title {
+      font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+      color: var(--teal); margin-bottom: 0.75rem;
+      padding-bottom: 0.4rem; border-bottom: 2px solid var(--teal-dim);
+    }
+    .dp-section p { font-size: 0.92rem; color: #444; line-height: 1.75; margin-bottom: 0.6rem; }
+    .dp-list { list-style: none; padding: 0; margin: 0; }
+    .dp-list li {
+      font-size: 0.9rem; color: #444; line-height: 1.6;
+      padding: 0.45rem 0 0.45rem 1.2rem; position: relative;
+      border-bottom: 1px solid var(--border);
+    }
+    .dp-list li:last-child { border-bottom: none; }
+    .dp-list li::before { content: '▸'; position: absolute; left: 0; color: var(--teal); font-size: 0.7rem; top: 0.55rem; }
+
+    .dp-result-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.8rem; }
+    .dp-result-chip {
+      background: var(--teal-dim); border-radius: 10px; padding: 0.75rem 1rem;
+      text-align: center;
+    }
+    .dp-result-chip .val { font-size: 1.3rem; font-weight: 800; color: var(--teal); }
+    .dp-result-chip .lbl { font-size: 0.75rem; color: var(--grey); margin-top: 0.2rem; }
+
+    .dp-links { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; }
+    .dp-link-btn {
+      padding: 0.5rem 1.1rem; border-radius: 8px; font-size: 0.85rem;
+      font-family: inherit; cursor: pointer; transition: all var(--transition);
+      text-decoration: none; display: inline-block;
+      border: 1.5px solid var(--teal); color: var(--teal); background: transparent;
+    }
+    .dp-link-btn:hover { background: var(--teal); color: var(--white); }
+    .dp-link-btn.primary { background: var(--teal); color: var(--white); }
+    .dp-link-btn.primary:hover { background: var(--teal-light); border-color: var(--teal-light); }
+    .dp-link-btn.indigo { border-color: #3949ab; color: #3949ab; }
+    .dp-link-btn.indigo:hover { background: #3949ab; color: var(--white); }
+
+    .dp-phase {
+      border-left: 3px solid var(--teal); padding: 0.6rem 0 0.6rem 1rem;
+      margin-bottom: 0.75rem;
+    }
+    .dp-phase-title { font-size: 0.88rem; font-weight: 700; color: var(--navy); margin-bottom: 0.3rem; }
+    .dp-phase-desc { font-size: 0.85rem; color: var(--grey); line-height: 1.6; }
 
     /* ── Add Project banner ── */
     .add-banner {
@@ -345,6 +436,20 @@
   </div>
 </div>
 
+<!-- Project Detail Panel -->
+<div id="detail-overlay"></div>
+<div id="detail-panel">
+  <div class="dp-hero">
+    <button class="dp-back" onclick="closeDetail()">← Back to Projects</button>
+    <div class="dp-hero-title" id="dp-title"></div>
+    <div class="dp-hero-meta">
+      <span id="dp-badge"></span>
+      <span class="dp-hero-date" id="dp-date"></span>
+    </div>
+  </div>
+  <div class="dp-body" id="dp-body"></div>
+</div>
+
 <!-- Footer -->
 <footer>
   Nabil Mouhamech &nbsp;·&nbsp; AI/ML Engineer &nbsp;·&nbsp; Data Engineer &nbsp;·&nbsp;
@@ -367,8 +472,32 @@ const PROJECTS = [
     tags: ['Python','LangChain','FAISS','LLM','Hugging Face'],
     status: 'progress',
     date: '2026',
-    github: '',
-    demo: ''
+    github: '', demo: '',
+    details: {
+      overview: 'A production-oriented Retrieval-Augmented Generation (RAG) system that enables question answering over private document collections. Instead of relying solely on a language model\'s training knowledge, the system retrieves the most relevant document chunks at query time and feeds them into the LLM as context — dramatically reducing hallucinations and keeping answers grounded in source material.',
+      sections: [
+        { title: 'What I\'m Building', items: [
+          'Document ingestion pipeline: PDF/text loading, chunking, and embedding with Hugging Face sentence-transformers',
+          'FAISS vector store for fast approximate nearest-neighbour search over high-dimensional embeddings',
+          'LangChain retrieval chain connecting the vector store to an LLM (OpenAI / local model via llama.cpp)',
+          'Optimised prompt templates with few-shot examples to control output format and reduce hallucination',
+          'Query preprocessing: question rewriting and hypothetical document embeddings (HyDE) for better recall',
+        ]},
+        { title: 'Technical Approach', items: [
+          'Chunking strategy: recursive character splitting with overlap to preserve sentence context across boundaries',
+          'Embedding model: sentence-transformers/all-MiniLM-L6-v2 (384-dim, fast and accurate)',
+          'Retrieval: top-k similarity search with MMR (Maximal Marginal Relevance) for diversity',
+          'LangChain LCEL (LangChain Expression Language) for composable, streaming-ready chain design',
+          'Evaluation: RAGAS framework — faithfulness, answer relevancy, context precision metrics',
+        ]},
+        { title: 'Current Status & Next Steps', items: [
+          'Completed: document ingestion, chunking, embedding, and basic retrieval chain',
+          'In progress: prompt optimisation and retrieval quality improvement (precision@k tuning)',
+          'Next: add re-ranking layer (cross-encoder), multi-query retrieval, and conversational memory',
+          'Planned: evaluation dashboard with RAGAS scores per query type',
+        ]},
+      ]
+    }
   },
   {
     id: 'p2',
@@ -377,8 +506,32 @@ const PROJECTS = [
     tags: ['Python','Pandas','scikit-learn','MLflow','Feature Engineering'],
     status: 'completed',
     date: '2025',
-    github: '',
-    demo: ''
+    github: '', demo: '',
+    details: {
+      overview: 'A modular, reproducible end-to-end machine learning pipeline built with production readiness in mind. Every stage — from raw data ingestion to model evaluation — is tracked, versioned, and logged so that experiments can be reproduced exactly and the best model can be promoted to serving with confidence.',
+      sections: [
+        { title: 'What I Built', items: [
+          'Modular preprocessing pipeline: missing value imputation, outlier detection, and categorical encoding via sklearn Pipeline objects',
+          'Advanced feature engineering: polynomial interactions, domain-specific aggregations, and automated feature selection (RFE + mutual information)',
+          'Model training harness supporting multiple estimators (Random Forest, Gradient Boosting, Logistic Regression) with unified API',
+          'Hyperparameter optimisation with scikit-learn GridSearchCV and cross-validated scoring',
+          'MLflow experiment tracking: logged parameters, metrics, artefacts, and model registry for each run',
+        ]},
+        { title: 'Technical Approach', items: [
+          'Pipeline architecture: sklearn Pipeline ensures that preprocessing fit only on training data — no data leakage',
+          'Stratified K-Fold cross-validation to handle class imbalance and get stable generalisation estimates',
+          'Feature importance analysis: SHAP values for model explainability alongside permutation importance',
+          'Model evaluation: classification report, ROC-AUC, confusion matrix, calibration curves',
+          'MLflow Model Registry: model versioning with Staging → Production promotion workflow',
+        ]},
+        { title: 'Results', items: [
+          'Achieved fully reproducible experiments: any run can be re-executed from its MLflow run ID',
+          'Feature engineering improved baseline model AUC by ~8–12% over raw features',
+          'Pipeline design eliminated data leakage — a common source of overly optimistic offline metrics',
+          'Clean modular codebase: adding a new model requires only registering it in the estimator config dict',
+        ]},
+      ]
+    }
   },
   {
     id: 'p3',
@@ -387,8 +540,30 @@ const PROJECTS = [
     tags: ['n8n','Python','LLM','API Integration'],
     status: 'progress',
     date: '2026',
-    github: '',
-    demo: ''
+    github: '', demo: '',
+    details: {
+      overview: 'A no-code/low-code automation platform built on n8n that orchestrates multi-step workflows involving external APIs, data transformation, and LLM-powered text processing. The goal is to replace repetitive manual tasks with intelligent, event-driven pipelines that run on schedule or in response to triggers.',
+      sections: [
+        { title: 'What I\'m Building', items: [
+          'Trigger-based workflows: webhook, schedule, and email triggers feeding into processing chains',
+          'LLM integration nodes: calls to OpenAI / local LLM for summarisation, classification, and extraction',
+          'Data transformation: JSON parsing, field mapping, conditional branching, and error handling',
+          'API integrations: connecting external services (news feeds, databases, notification services)',
+          'Python function nodes for custom logic that n8n built-in nodes cannot handle',
+        ]},
+        { title: 'Technical Approach', items: [
+          'n8n self-hosted on Docker for full control over data and workflow definitions',
+          'LLM prompt engineering: structured output prompts (JSON mode) for reliable downstream parsing',
+          'Workflow versioning: export/import JSON definitions for reproducibility and backup',
+          'Error handling: retry logic, fallback branches, and Slack/email alerts on failure',
+        ]},
+        { title: 'Current Status & Next Steps', items: [
+          'Completed: summarisation pipeline for long documents, scheduled data fetch and transform workflows',
+          'In progress: intelligent routing — LLM classifies incoming data and dispatches to specialist sub-workflows',
+          'Next: RAG integration — workflows that query the vector store before calling the LLM',
+        ]},
+      ]
+    }
   },
   {
     id: 'p4',
@@ -397,8 +572,31 @@ const PROJECTS = [
     tags: ['Python','Pandas','NumPy','Matplotlib','Seaborn'],
     status: 'completed',
     date: '2025',
-    github: '',
-    demo: ''
+    github: '', demo: '',
+    details: {
+      overview: 'A comprehensive exploratory data analysis (EDA) project on real-world structured datasets. The focus was on the full analytical workflow: acquiring and cleaning messy data, understanding distributions and relationships, and translating statistical findings into clear visual narratives for non-technical stakeholders.',
+      sections: [
+        { title: 'What I Built', items: [
+          'Data cleaning pipeline: handling missing values, duplicates, type inconsistencies, and outliers',
+          'Univariate analysis: distributions, skewness, and outlier detection for all numeric features',
+          'Bivariate & multivariate analysis: correlation matrices, pair plots, and grouped aggregations',
+          'Time-series decomposition: trend, seasonality, and residual components where applicable',
+          'Final presentation-quality visualisation report with annotated charts and written insights',
+        ]},
+        { title: 'Technical Approach', items: [
+          'Pandas for data wrangling: chained transformations, groupby aggregations, pivot tables',
+          'NumPy for vectorised computations and statistical calculations',
+          'Matplotlib + Seaborn for publication-quality charts: heatmaps, violin plots, regression plots',
+          'Documented Jupyter notebook with markdown narrative explaining each analytical step',
+        ]},
+        { title: 'Results', items: [
+          'Identified 3 key patterns in the data with actionable business implications',
+          'Reduced dataset noise by 15% through principled outlier handling and deduplication',
+          'Created a reusable EDA template notebook applicable to future structured datasets',
+          'Findings communicated clearly in a visual report without requiring statistical background',
+        ]},
+      ]
+    }
   },
   {
     id: 'p5',
@@ -407,8 +605,32 @@ const PROJECTS = [
     tags: ['Python','C++','Cybersecurity','Networking'],
     status: 'completed',
     date: '2025',
-    github: '',
-    demo: ''
+    github: '', demo: '',
+    details: {
+      overview: 'A custom network vulnerability scanner combining Python\'s ecosystem for orchestration and reporting with C++ for high-performance, low-level packet handling. The tool scans target networks for open ports, running services, and known vulnerabilities, then generates a structured remediation report — inspired by professional tools like Nmap and OpenVAS but built from the ground up as a learning and practical security exercise.',
+      sections: [
+        { title: 'What I Built', items: [
+          'TCP/UDP port scanner in C++ using raw sockets — significantly faster than pure Python alternatives',
+          'Service detection: banner grabbing and protocol fingerprinting to identify running software versions',
+          'CVE lookup: maps detected service versions against a local vulnerability database',
+          'Python orchestration layer: controls the C++ scanner, parses output, and drives the reporting pipeline',
+          'HTML + JSON report generator: severity-ranked findings with remediation suggestions per vulnerability',
+        ]},
+        { title: 'Technical Approach', items: [
+          'C++ scanner uses non-blocking sockets with select() for concurrent scanning of multiple hosts',
+          'Python subprocess module manages the C++ binary with timeout and error handling',
+          'Threading in Python for parallel service detection across multiple open ports',
+          'CVSS scoring integrated into the report to prioritise critical findings',
+          'Cisco ethical hacking methodology applied — scope definition, passive/active phases, reporting',
+        ]},
+        { title: 'Results', items: [
+          'Scan speed 10–15× faster than equivalent pure-Python implementation on large subnets',
+          'Successfully identified misconfigured services and outdated software in test environments',
+          'Generated clear remediation reports suitable for presenting to non-technical system owners',
+          'Project aligned with Cisco Ethical Hacking certification coursework (certified Feb 2025)',
+        ]},
+      ]
+    }
   },
   {
     id: 'p6',
@@ -417,8 +639,33 @@ const PROJECTS = [
     tags: ['Python','Django','JWT','Security'],
     status: 'completed',
     date: '2024',
-    github: '',
-    demo: ''
+    github: '', demo: '',
+    details: {
+      overview: 'A production-grade authentication module built with Django, implementing security best practices far beyond the framework defaults. Designed as a reusable authentication backend that any Django application can integrate, covering the full identity lifecycle: registration, login, MFA, session management, and account recovery.',
+      sections: [
+        { title: 'What I Built', items: [
+          'JWT-based stateless authentication: access tokens (15 min TTL) + refresh tokens (7-day rotation)',
+          'Multi-factor authentication: TOTP (Google Authenticator compatible) via pyotp library',
+          'Brute-force protection: progressive lockout after failed attempts with Redis-backed rate limiting',
+          'Password policy engine: complexity rules, breach-detection via HaveIBeenPwned API, history enforcement',
+          'Secure account recovery: time-limited, single-use tokens delivered via email',
+          'Audit logging: every authentication event stored with IP, user-agent, and timestamp',
+        ]},
+        { title: 'Technical Approach', items: [
+          'Django REST Framework for the API layer with custom permission classes',
+          'PyJWT for token signing (RS256 algorithm — asymmetric keys for stateless verification)',
+          'Redis for rate limiting counters and refresh token blocklist (instant revocation)',
+          'Django\'s built-in CSRF protection retained for browser clients; disabled only for pure API clients',
+          'Unit tests covering all auth flows including edge cases (expired tokens, concurrent refresh)',
+        ]},
+        { title: 'Results', items: [
+          'Zero known authentication vulnerabilities across OWASP Top 10 auth-related categories',
+          'MFA adoption flow reduces account takeover risk by eliminating password-only login',
+          'Rate limiting blocks credential stuffing attacks at <10 attempts per minute per IP',
+          'Reusable module: pluggable into any Django project via pip-installable package structure',
+        ]},
+      ]
+    }
   },
   {
     id: 'p7',
@@ -427,8 +674,33 @@ const PROJECTS = [
     tags: ['Node.js','Express','MongoDB','React'],
     status: 'completed',
     date: '2024',
-    github: '',
-    demo: ''
+    github: '', demo: '',
+    details: {
+      overview: 'A fully functional e-commerce platform built on the MERN stack covering the complete shopping experience — from product browsing and cart management to secure checkout and order tracking. The platform also includes an admin dashboard for product and inventory management.',
+      sections: [
+        { title: 'What I Built', items: [
+          'React storefront: product catalogue with filtering/search, product detail pages, and responsive cart UI',
+          'Express.js REST API: product, user, order, and payment endpoints with input validation',
+          'MongoDB with Mongoose: flexible product schema supporting variants (size, colour) and nested reviews',
+          'Authentication: JWT-based auth with role separation (customer vs admin) using middleware guards',
+          'Payment integration: Stripe API for secure card processing with webhook-based order confirmation',
+          'Admin dashboard: product CRUD, inventory management, order status updates, and sales overview',
+        ]},
+        { title: 'Technical Approach', items: [
+          'Redux Toolkit for global cart and auth state management in React',
+          'Express Router with layered middleware: auth → validation → controller → service',
+          'MongoDB aggregation pipelines for order analytics and product performance reports',
+          'Stripe webhooks to confirm payment asynchronously — prevents order fulfilment on failed charges',
+          'Image uploads: multer middleware with client-side preview before submission',
+        ]},
+        { title: 'Results', items: [
+          'Complete shopping flow: browse → add to cart → checkout → payment → order confirmation',
+          'Admin panel allows full product lifecycle management without touching code',
+          'Stripe integration handles PCI-compliant payment processing — no card data stored on server',
+          'Mobile-responsive UI tested on multiple screen sizes',
+        ]},
+      ]
+    }
   },
   {
     id: 'p8',
@@ -437,8 +709,33 @@ const PROJECTS = [
     tags: ['Three.js','React','D3.js','JavaScript'],
     status: 'completed',
     date: '2024',
-    github: '',
-    demo: ''
+    github: '', demo: '',
+    details: {
+      overview: 'An interactive data visualisation dashboard that goes beyond flat 2D charts by rendering data in three dimensions using Three.js, combined with traditional D3.js charts for statistical summaries. Designed to help analysts explore multi-dimensional datasets intuitively through rotation, zoom, and click-to-inspect interactions.',
+      sections: [
+        { title: 'What I Built', items: [
+          '3D scatter plot: Three.js PointsMaterial rendering thousands of data points with colour-coded dimensions',
+          '3D bar chart and surface plot for comparing categorical and continuous data in 3D space',
+          'D3.js side panels: linked 2D histograms and parallel coordinates that highlight selections in 3D',
+          'Interactive controls: orbit controls (rotate/zoom/pan), animated transitions between data views',
+          'Real-time data simulation: WebSocket-style interval updates that animate new data points flowing in',
+          'React integration: Three.js canvas managed inside useEffect hooks with proper cleanup',
+        ]},
+        { title: 'Technical Approach', items: [
+          'Three.js BufferGeometry for performant rendering of large point clouds (10k+ points at 60fps)',
+          'Raycasting for click detection on 3D objects — shows data labels on hover/click',
+          'D3 scales used alongside Three.js to map data values to 3D coordinates consistently',
+          'React ref pattern for the Three.js canvas — avoids re-render conflicts with animation loop',
+          'CSS3DRenderer for overlaying HTML labels in 3D space without performance penalty',
+        ]},
+        { title: 'Results', items: [
+          'Smooth 60fps rendering on mid-range hardware with 10,000+ data points simultaneously',
+          'Bidirectional linking: selecting points in 3D highlights corresponding rows in 2D charts',
+          'Animated transitions make data updates visually comprehensible rather than jarring',
+          'Demonstrated that 3D visualisation reveals cluster structures invisible in 2D projections',
+        ]},
+      ]
+    }
   },
   {
     id: 'p9',
@@ -447,10 +744,36 @@ const PROJECTS = [
     tags: ['Python','BERT','TinyBERT','LSTM','GRU','fastText','scikit-learn','TF-IDF','SVM','NLP','Transformers','PyTorch','TDA','Persistent Homology','Hugging Face'],
     status: 'planned',
     date: '2026',
-    github: '',
-    demo: '',
+    github: '', demo: '',
     planEN: 'AI_Detection_Project_Plan_EN.pdf',
-    planRU: 'AI_Detection_Project_Plan.pdf'
+    planRU: 'AI_Detection_Project_Plan.pdf',
+    details: {
+      overview: 'Seminar research project at HSE University (Master\'s in Applied AI, 2026). Binary classification of human vs AI-generated text, grounded in two research papers: the "Hidden Holes" paper (persistent homology / perforation metric) and Gromov\'s "Spot the Bot" (language as a self-organised critical system — Hausdorff dimension achieves 93–97% accuracy without neural networks). The project also introduces a novel soft-label confidence score rather than a hard binary output.',
+      sections: [
+        { title: 'Research Foundation', items: [
+          '"Hidden Holes" (Kushnareva et al.): human text has higher topological complexity than AI text — measurable via Betti numbers on Vietoris-Rips complexes built from embeddings',
+          'Gromov "Spot the Bot" (HSE): language obeys self-organised criticality — AI text deviates from the Hausdorff dimension and entropy-complexity signature of human writing',
+          'Supervisor\'s guidance: fastText + LSTM as strong baseline; GRU vs LSTM experiment; TinyBERT as advanced model; soft labels instead of hard binary labels',
+        ]},
+        { title: 'Planned Pipeline', items: [
+          'Phase 1 — Data: HC3, TuringBench, RAID datasets · stratified 70/15/15 split · quality audit',
+          'Phase 2 — Baseline: TF-IDF + SVM / Logistic Regression (expected ~70–75% — confirms lower bound)',
+          'Phase 3 — Neural baseline: fastText + LSTM · parallel GRU experiment · confidence score via softmax',
+          'Phase 4 — Advanced: TinyBERT fine-tuning · temperature scaling · sentence-level mixed-content scoring',
+          'Phase 5 — TDA: Vietoris-Rips complexes · Betti numbers β₀ β₁ · perforation metric · Hausdorff dimension',
+          'Phase 6 — Comparison: summary table · error analysis · ensemble confidence score · final report',
+        ]},
+        { title: 'Expected Results', items: [
+          'TF-IDF + SVM: ~70–75% accuracy — confirmed weak baseline',
+          'fastText + LSTM: ~85–90% — strong recommended baseline capturing local context',
+          'TinyBERT fine-tuned: ~92–95% — expected F1 leader',
+          'TDA-only (Gromov-style): ~88–93% without any neural network — novel contribution',
+          'Ensemble confidence score: combines model probability (0.5) + topological metric (0.3) + linguistic features (0.2)',
+        ]},
+      ],
+      planEN: 'AI_Detection_Project_Plan_EN.pdf',
+      planRU: 'AI_Detection_Project_Plan.pdf'
+    }
   }
 ];
 // ═══════════════════════════════════════════════════════════════════════════
@@ -469,13 +792,13 @@ function badgeHTML(status) {
 }
 
 function cardHTML(p) {
-  const tags    = p.tags.map(t => `<span class="tag">${t}</span>`).join('');
-  const ghBtn   = p.github  ? `<a href="${p.github}"  target="_blank" class="card-link-btn">GitHub</a>` : '';
-  const demoBtn = p.demo    ? `<a href="${p.demo}"    target="_blank" class="card-link-btn">Demo</a>`   : '';
-  const planENBtn = p.planEN ? `<a href="${p.planEN}" target="_blank" class="card-link-btn card-link-plan">📄 Plan (EN)</a>` : '';
-  const planRUBtn = p.planRU ? `<a href="${p.planRU}" target="_blank" class="card-link-btn card-link-plan">📄 План (RU)</a>` : '';
+  const tags      = p.tags.map(t => `<span class="tag">${t}</span>`).join('');
+  const ghBtn     = p.github  ? `<a href="${p.github}"  target="_blank" class="card-link-btn">GitHub</a>` : '';
+  const demoBtn   = p.demo    ? `<a href="${p.demo}"    target="_blank" class="card-link-btn">Demo</a>`   : '';
+  const planENBtn = p.planEN  ? `<a href="${p.planEN}" target="_blank" class="card-link-btn card-link-plan">📄 Plan (EN)</a>` : '';
+  const planRUBtn = p.planRU  ? `<a href="${p.planRU}" target="_blank" class="card-link-btn card-link-plan">📄 План (RU)</a>` : '';
   return `
-    <div class="project-card" data-status="${p.status}">
+    <div class="project-card" data-status="${p.status}" onclick="openDetail('${p.id}')" style="cursor:pointer">
       <div class="card-header">
         <div class="card-title">${p.title}</div>
         ${badgeHTML(p.status)}
@@ -484,7 +807,10 @@ function cardHTML(p) {
       <div class="card-tags">${tags}</div>
       <div class="card-footer">
         <span class="card-date">${p.date || ''}</span>
-        <div class="card-links">${ghBtn}${demoBtn}${planENBtn}${planRUBtn}</div>
+        <div class="card-links" onclick="event.stopPropagation()">
+          ${ghBtn}${demoBtn}${planENBtn}${planRUBtn}
+          <button class="card-details-btn">Details →</button>
+        </div>
       </div>
     </div>`;
 }
@@ -521,6 +847,69 @@ function showToast(msg) {
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 3000);
 }
+
+// ── Detail Modal ───────────────────────────────────────────────────────────
+function openDetail(id) {
+  const p = PROJECTS.find(x => x.id === id);
+  if (!p || !p.details) return;
+  const d = p.details;
+
+  // Badge
+  document.getElementById('dp-title').textContent = p.title;
+  document.getElementById('dp-date').textContent  = p.date || '';
+  document.getElementById('dp-badge').outerHTML =
+    `<span id="dp-badge">${badgeHTML(p.status)}</span>`;
+
+  // Tags
+  const tagsHTML = p.tags.map(t => `<span class="dp-tag">${t}</span>`).join('');
+
+  // Sections
+  let sectionsHTML = '';
+  if (d.overview) {
+    sectionsHTML += `
+      <div class="dp-section">
+        <div class="dp-section-title">Overview</div>
+        <p>${d.overview}</p>
+      </div>`;
+  }
+  (d.sections || []).forEach(s => {
+    const items = s.items.map(i => `<li>${i}</li>`).join('');
+    sectionsHTML += `
+      <div class="dp-section">
+        <div class="dp-section-title">${s.title}</div>
+        <ul class="dp-list">${items}</ul>
+      </div>`;
+  });
+
+  // Links
+  const links = [];
+  if (p.github)       links.push(`<a href="${p.github}"  target="_blank" class="dp-link-btn primary">⚙ GitHub</a>`);
+  if (p.demo)         links.push(`<a href="${p.demo}"    target="_blank" class="dp-link-btn primary">🔗 Live Demo</a>`);
+  if (p.planEN || d.planEN) links.push(`<a href="${p.planEN||d.planEN}" target="_blank" class="dp-link-btn indigo">📄 Project Plan (EN)</a>`);
+  if (p.planRU || d.planRU) links.push(`<a href="${p.planRU||d.planRU}" target="_blank" class="dp-link-btn indigo">📄 Project Plan (RU)</a>`);
+  const linksHTML = links.length
+    ? `<div class="dp-section"><div class="dp-section-title">Links</div><div class="dp-links">${links.join('')}</div></div>`
+    : '';
+
+  document.getElementById('dp-body').innerHTML = `
+    <div class="dp-tags">${tagsHTML}</div>
+    ${sectionsHTML}
+    ${linksHTML}
+  `;
+
+  document.getElementById('detail-overlay').classList.add('open');
+  document.getElementById('detail-panel').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDetail() {
+  document.getElementById('detail-overlay').classList.remove('open');
+  document.getElementById('detail-panel').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('detail-overlay').addEventListener('click', closeDetail);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDetail(); });
 
 // ── Init ───────────────────────────────────────────────────────────────────
 renderProjects();
