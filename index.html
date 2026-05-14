@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nabil Mouhamech — Portfolio</title>
+  <style>
+    /* ── Reset & Variables ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --teal:       #007A8A;
+      --teal-light: #00a3b8;
+      --teal-dim:   #e6f4f6;
+      --navy:       #1A2A3A;
+      --grey:       #555;
+      --light:      #f4f6f8;
+      --white:      #ffffff;
+      --card-bg:    #ffffff;
+      --border:     #e0e6ea;
+      --shadow:     0 4px 20px rgba(0,0,0,0.08);
+      --radius:     12px;
+      --transition: 0.25s ease;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--light);
+      color: var(--navy);
+      line-height: 1.6;
+    }
+
+    a { color: var(--teal); text-decoration: none; }
+    a:hover { color: var(--teal-light); }
+
+    /* ── Nav ────────────────────────────────────────────────────────────── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--navy);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 60px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+    }
+    .nav-logo { color: var(--white); font-weight: 700; font-size: 1.1rem; letter-spacing: 0.5px; }
+    .nav-logo span { color: var(--teal-light); }
+    .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+    .nav-links a { color: #bbb; font-size: 0.9rem; transition: color var(--transition); }
+    .nav-links a:hover { color: var(--white); }
+    #addBtn {
+      background: var(--teal); color: var(--white);
+      border: none; padding: 0.45rem 1.1rem; border-radius: 6px;
+      font-size: 0.88rem; font-weight: 600; cursor: pointer;
+      transition: background var(--transition);
+    }
+    #addBtn:hover { background: var(--teal-light); }
+
+    /* ── Hero ───────────────────────────────────────────────────────────── */
+    #hero {
+      background: linear-gradient(135deg, var(--navy) 0%, #243447 60%, #1e3a4a 100%);
+      color: var(--white);
+      padding: 5rem 2rem 4rem;
+      text-align: center;
+    }
+    .hero-name {
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      font-weight: 800; letter-spacing: -0.5px;
+      margin-bottom: 0.5rem;
+    }
+    .hero-name span { color: var(--teal-light); }
+    .hero-title {
+      font-size: 1.15rem; color: #9ab8c8; margin-bottom: 1.5rem;
+    }
+    .hero-links { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+    .hero-link {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: rgba(255,255,255,0.1); color: var(--white);
+      padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.85rem;
+      transition: background var(--transition);
+    }
+    .hero-link:hover { background: var(--teal); color: var(--white); }
+    .hero-summary {
+      max-width: 680px; margin: 1.8rem auto 0;
+      font-size: 0.97rem; color: #bcd;
+      line-height: 1.75;
+    }
+
+    /* ── Section wrapper ────────────────────────────────────────────────── */
+    section { padding: 3.5rem 2rem; max-width: 1100px; margin: 0 auto; }
+    .section-title {
+      font-size: 1.5rem; font-weight: 700; color: var(--navy);
+      margin-bottom: 0.35rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .section-title::after {
+      content: ''; flex: 1; height: 2px; background: var(--border); margin-left: 0.5rem;
+    }
+    .section-sub { font-size: 0.9rem; color: var(--grey); margin-bottom: 2rem; }
+
+    /* ── Filter bar ─────────────────────────────────────────────────────── */
+    .filter-bar {
+      display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem;
+    }
+    .filter-btn {
+      padding: 0.35rem 0.9rem; border-radius: 20px;
+      border: 1.5px solid var(--border); background: var(--white);
+      font-size: 0.82rem; cursor: pointer; transition: all var(--transition);
+      color: var(--grey);
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--teal); border-color: var(--teal); color: var(--white);
+    }
+
+    /* ── Project grid ───────────────────────────────────────────────────── */
+    #projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      background: var(--card-bg); border-radius: var(--radius);
+      box-shadow: var(--shadow); border: 1px solid var(--border);
+      padding: 1.5rem; display: flex; flex-direction: column;
+      transition: transform var(--transition), box-shadow var(--transition);
+      position: relative; overflow: hidden;
+    }
+    .project-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: var(--teal);
+    }
+    .project-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(0,122,138,0.15);
+    }
+
+    .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem; }
+    .card-title { font-size: 1.05rem; font-weight: 700; color: var(--navy); flex: 1; }
+    .badge {
+      font-size: 0.7rem; font-weight: 600; padding: 0.2rem 0.6rem;
+      border-radius: 10px; white-space: nowrap; margin-left: 0.5rem; flex-shrink: 0;
+    }
+    .badge.completed  { background: #d4f5e9; color: #1a7a4a; }
+    .badge.progress   { background: #fff3cd; color: #856404; }
+    .badge.planned    { background: #e8eaf6; color: #3949ab; }
+
+    .card-desc { font-size: 0.88rem; color: var(--grey); flex: 1; margin-bottom: 1rem; line-height: 1.65; }
+
+    .card-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
+    .tag {
+      font-size: 0.72rem; background: var(--teal-dim); color: var(--teal);
+      padding: 0.2rem 0.55rem; border-radius: 6px; font-weight: 500;
+    }
+
+    .card-footer { display: flex; align-items: center; justify-content: space-between; }
+    .card-date { font-size: 0.78rem; color: #aaa; }
+    .card-links { display: flex; gap: 0.5rem; }
+    .card-link-btn {
+      font-size: 0.78rem; padding: 0.25rem 0.7rem; border-radius: 6px;
+      border: 1.5px solid var(--teal); color: var(--teal);
+      background: transparent; cursor: pointer; transition: all var(--transition);
+      font-family: inherit;
+    }
+    .card-link-btn:hover { background: var(--teal); color: var(--white); }
+    .card-delete {
+      background: none; border: none; cursor: pointer;
+      color: #ccc; font-size: 1rem; padding: 0.2rem 0.4rem;
+      border-radius: 4px; transition: color var(--transition);
+    }
+    .card-delete:hover { color: #e74c3c; }
+
+    /* ── Skills section ─────────────────────────────────────────────────── */
+    #skills { background: var(--white); border-radius: var(--radius); padding: 2.5rem; box-shadow: var(--shadow); margin: 0 0 2rem; }
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.2rem; }
+    .skill-group h4 { font-size: 0.82rem; color: var(--teal); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem; }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+    .skill-tag { font-size: 0.75rem; background: var(--light); color: var(--navy); padding: 0.2rem 0.55rem; border-radius: 6px; }
+
+    /* ── Empty state ────────────────────────────────────────────────────── */
+    .empty-state {
+      grid-column: 1/-1; text-align: center; padding: 3rem;
+      color: var(--grey); font-size: 0.95rem;
+    }
+    .empty-state .big { font-size: 2.5rem; margin-bottom: 0.5rem; }
+
+    /* ── Modal overlay ──────────────────────────────────────────────────── */
+    #modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5); z-index: 200;
+      align-items: center; justify-content: center; padding: 1rem;
+    }
+    #modal-overlay.open { display: flex; }
+
+    #modal {
+      background: var(--white); border-radius: var(--radius);
+      width: 100%; max-width: 540px; max-height: 92vh; overflow-y: auto;
+      padding: 2rem; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      animation: slideUp 0.25s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+    .modal-header h2 { font-size: 1.2rem; color: var(--navy); }
+    #closeModal { background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--grey); }
+
+    .form-group { margin-bottom: 1.1rem; }
+    label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--navy); margin-bottom: 0.35rem; }
+    input, textarea, select {
+      width: 100%; padding: 0.6rem 0.85rem;
+      border: 1.5px solid var(--border); border-radius: 8px;
+      font-family: inherit; font-size: 0.9rem; color: var(--navy);
+      background: var(--white); transition: border-color var(--transition);
+      outline: none;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--teal); }
+    textarea { resize: vertical; min-height: 80px; }
+    .form-hint { font-size: 0.76rem; color: #aaa; margin-top: 0.25rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    #submitBtn {
+      width: 100%; background: var(--teal); color: var(--white);
+      border: none; padding: 0.75rem; border-radius: 8px;
+      font-size: 0.95rem; font-weight: 600; cursor: pointer;
+      transition: background var(--transition); margin-top: 0.5rem;
+    }
+    #submitBtn:hover { background: var(--teal-light); }
+
+    /* ── Toast ──────────────────────────────────────────────────────────── */
+    #toast {
+      position: fixed; bottom: 2rem; right: 2rem;
+      background: var(--navy); color: var(--white);
+      padding: 0.75rem 1.3rem; border-radius: 8px; font-size: 0.88rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+      opacity: 0; transform: translateY(10px);
+      transition: all 0.3s ease; pointer-events: none; z-index: 300;
+    }
+    #toast.show { opacity: 1; transform: translateY(0); }
+
+    /* ── Footer ─────────────────────────────────────────────────────────── */
+    footer {
+      text-align: center; padding: 2rem;
+      font-size: 0.82rem; color: #aaa;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── Responsive ─────────────────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .form-row { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Navigation ──────────────────────────────────────────────────────── -->
+<nav>
+  <span class="nav-logo">Nabil <span>Mouhamech</span></span>
+  <ul class="nav-links">
+    <li><a href="#hero">Home</a></li>
+    <li><a href="#projects-section">Projects</a></li>
+    <li><a href="#skills-section">Skills</a></li>
+  </ul>
+  <button id="addBtn">+ Add Project</button>
+</nav>
+
+<!-- ── Hero ────────────────────────────────────────────────────────────── -->
+<div id="hero">
+  <div class="hero-name">Nabil <span>Mouhamech</span></div>
+  <div class="hero-title">AI/ML Engineer &nbsp;·&nbsp; Data Scientist &nbsp;·&nbsp; Data Engineer</div>
+  <div class="hero-links">
+    <a class="hero-link" href="https://github.com/NabilM5" target="_blank">⚙ GitHub</a>
+    <a class="hero-link" href="https://linkedin.com/in/nabilmouhamech" target="_blank">💼 LinkedIn</a>
+    <a class="hero-link" href="https://nabilm5.github.io" target="_blank">🌐 Portfolio</a>
+    <a class="hero-link" href="#">📍 Morocco</a>
+  </div>
+  <p class="hero-summary">
+    Applied AI graduate student specializing in machine learning, data engineering, and LLM systems.
+    Building scalable data pipelines and intelligent applications with Python, PyTorch, LangChain, and more.
+  </p>
+</div>
+
+<!-- ── Projects ────────────────────────────────────────────────────────── -->
+<section id="projects-section">
+  <div class="section-title">Projects <span style="font-size:1rem;color:var(--teal)" id="project-count"></span></div>
+  <div class="section-sub">Every completed project is added here automatically when you click "+ Add Project"</div>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="completed">Completed</button>
+    <button class="filter-btn" data-filter="progress">In Progress</button>
+    <button class="filter-btn" data-filter="planned">Planned</button>
+  </div>
+
+  <div id="projects-grid"></div>
+</section>
+
+<!-- ── Skills ──────────────────────────────────────────────────────────── -->
+<section id="skills-section" style="padding-top:0">
+  <div class="section-title">Skills</div>
+  <div class="section-sub">Technical stack across AI/ML, data engineering, and software development</div>
+  <div id="skills" style="margin:0">
+    <div class="skills-grid">
+      <div class="skill-group">
+        <h4>Programming</h4>
+        <div class="skill-tags">
+          <span class="skill-tag">Python</span><span class="skill-tag">C++</span>
+          <span class="skill-tag">JavaScript</span><span class="skill-tag">SQL</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h4>Data Science & ML</h4>
+        <div class="skill-tags">
+          <span class="skill-tag">NumPy</span><span class="skill-tag">Pandas</span>
+          <span class="skill-tag">scikit-learn</span><span class="skill-tag">PyTorch</span>
+          <span class="skill-tag">Matplotlib</span><span class="skill-tag">Seaborn</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h4>LLM / RAG / NLP</h4>
+        <div class="skill-tags">
+          <span class="skill-tag">LangChain</span><span class="skill-tag">FAISS</span>
+          <span class="skill-tag">LlamaIndex</span><span class="skill-tag">HuggingFace</span>
+          <span class="skill-tag">n8n</span><span class="skill-tag">RAG Systems</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h4>MLOps & Tools</h4>
+        <div class="skill-tags">
+          <span class="skill-tag">Git</span><span class="skill-tag">Docker</span>
+          <span class="skill-tag">MLflow</span><span class="skill-tag">Linux</span>
+          <span class="skill-tag">Bash</span><span class="skill-tag">CI/CD</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h4>Databases</h4>
+        <div class="skill-tags">
+          <span class="skill-tag">MySQL</span><span class="skill-tag">PostgreSQL</span>
+          <span class="skill-tag">MongoDB</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h4>Web & Backend</h4>
+        <div class="skill-tags">
+          <span class="skill-tag">Django</span><span class="skill-tag">Flask</span>
+          <span class="skill-tag">Node.js</span><span class="skill-tag">React.js</span>
+          <span class="skill-tag">REST APIs</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h4>Cybersecurity</h4>
+        <div class="skill-tags">
+          <span class="skill-tag">Ethical Hacking</span>
+          <span class="skill-tag">Penetration Testing</span>
+          <span class="skill-tag">CISCO Certified</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h4>Languages</h4>
+        <div class="skill-tags">
+          <span class="skill-tag">Arabic (Native)</span>
+          <span class="skill-tag">English (Fluent)</span>
+          <span class="skill-tag">French (Intermediate)</span>
+          <span class="skill-tag">Russian (Intermediate)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ──────────────────────────────────────────────────────────── -->
+<footer>
+  Built by Nabil Mouhamech &nbsp;·&nbsp; AI/ML Engineer &nbsp;·&nbsp;
+  <a href="https://github.com/NabilM5" target="_blank">github.com/NabilM5</a>
+</footer>
+
+<!-- ── Add Project Modal ────────────────────────────────────────────────── -->
+<div id="modal-overlay">
+  <div id="modal">
+    <div class="modal-header">
+      <h2>➕ Add New Project</h2>
+      <button id="closeModal">✕</button>
+    </div>
+    <form id="projectForm">
+      <div class="form-group">
+        <label>Project Title *</label>
+        <input type="text" id="f-title" placeholder="e.g. Sentiment Analysis Pipeline" required />
+      </div>
+      <div class="form-group">
+        <label>Description *</label>
+        <textarea id="f-desc" placeholder="What did you build? What problem does it solve?" required></textarea>
+      </div>
+      <div class="form-group">
+        <label>Tech Stack *</label>
+        <input type="text" id="f-tags" placeholder="Python, LangChain, FAISS, Docker" required />
+        <div class="form-hint">Separate with commas</div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Status *</label>
+          <select id="f-status" required>
+            <option value="completed">✅ Completed</option>
+            <option value="progress">🔄 In Progress</option>
+            <option value="planned">📋 Planned</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Date / Period</label>
+          <input type="text" id="f-date" placeholder="e.g. May 2026" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>GitHub Link</label>
+        <input type="url" id="f-github" placeholder="https://github.com/NabilM5/project" />
+      </div>
+      <div class="form-group">
+        <label>Live Demo Link</label>
+        <input type="url" id="f-demo" placeholder="https://..." />
+      </div>
+      <button type="submit" id="submitBtn">Save Project</button>
+    </form>
+  </div>
+</div>
+
+<!-- ── Toast ────────────────────────────────────────────────────────────── -->
+<div id="toast"></div>
+
+<script>
+// ── Default projects ────────────────────────────────────────────────────────
+const DEFAULT_PROJECTS = [
+  {
+    id: 'p1', title: 'LLM / RAG System',
+    desc: 'Building a Retrieval-Augmented Generation pipeline using vector embeddings and semantic search. Integrating LLMs for question answering over custom document collections with optimised prompt templates.',
+    tags: ['Python','LangChain','FAISS','LLM','Hugging Face'],
+    status: 'progress', date: '2026', github: '', demo: ''
+  },
+  {
+    id: 'p2', title: 'Machine Learning Pipeline (Production-Oriented)',
+    desc: 'End-to-end ML pipeline covering data preprocessing, training, evaluation, and experiment tracking with MLflow. Applied advanced feature engineering to improve model accuracy and reduce overfitting.',
+    tags: ['Python','Pandas','scikit-learn','MLflow','Feature Engineering'],
+    status: 'completed', date: '2025', github: '', demo: ''
+  },
+  {
+    id: 'p3', title: 'Automation Workflow (n8n + LLM)',
+    desc: 'Automated workflows using n8n for text processing and task orchestration. Integrating external APIs and LLMs for intelligent summarisation pipelines.',
+    tags: ['n8n','Python','LLM','API Integration'],
+    status: 'progress', date: '2026', github: '', demo: ''
+  },
+  {
+    id: 'p4', title: 'Data Analysis Project',
+    desc: 'Exploratory data analysis on structured datasets to surface key patterns and trends. Cleaned raw data and visualised findings using Matplotlib and Seaborn.',
+    tags: ['Python','Pandas','NumPy','Matplotlib','Seaborn'],
+    status: 'completed', date: '2025', github: '', demo: ''
+  },
+  {
+    id: 'p5', title: 'Network Security Scanner',
+    desc: 'Tool for scanning networks for vulnerabilities, generating detailed reports, and suggesting security improvements using Python and C++.',
+    tags: ['Python','C++','Cybersecurity','Networking'],
+    status: 'completed', date: '2025', github: '', demo: ''
+  },
+  {
+    id: 'p6', title: 'Secure Authentication System',
+    desc: 'Developed a secure authentication system with multi-factor authentication, password policies, and brute-force protection using Django and JWT.',
+    tags: ['Python','Django','JWT','Security'],
+    status: 'completed', date: '2024', github: '', demo: ''
+  },
+  {
+    id: 'p7', title: 'E-commerce Platform',
+    desc: 'Full-stack e-commerce platform with secure payment processing, inventory management, and user authentication built with the MERN stack.',
+    tags: ['Node.js','Express','MongoDB','React'],
+    status: 'completed', date: '2024', github: '', demo: ''
+  },
+  {
+    id: 'p8', title: '3D Visualization Dashboard',
+    desc: 'Interactive 3D dashboard for visualising complex data sets with real-time updates using Three.js, React, and D3.js.',
+    tags: ['Three.js','React','D3.js','JavaScript'],
+    status: 'completed', date: '2024', github: '', demo: ''
+  }
+];
+
+// ── Storage ────────────────────────────────────────────────────────────────
+const STORAGE_KEY = 'nabil_portfolio_projects';
+
+function loadProjects() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) return JSON.parse(saved);
+  // First load — seed with defaults
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_PROJECTS));
+  return DEFAULT_PROJECTS;
+}
+
+function saveProjects(projects) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
+}
+
+// ── Render ─────────────────────────────────────────────────────────────────
+let currentFilter = 'all';
+
+function badgeHTML(status) {
+  const map = { completed: ['completed','✅ Completed'], progress: ['progress','🔄 In Progress'], planned: ['planned','📋 Planned'] };
+  const [cls, label] = map[status] || map.planned;
+  return `<span class="badge ${cls}">${label}</span>`;
+}
+
+function cardHTML(p) {
+  const tags = p.tags.map(t => `<span class="tag">${t}</span>`).join('');
+  const ghBtn  = p.github ? `<a href="${p.github}" target="_blank" class="card-link-btn">GitHub</a>` : '';
+  const demoBtn = p.demo   ? `<a href="${p.demo}"   target="_blank" class="card-link-btn">Demo</a>`   : '';
+  return `
+    <div class="project-card" data-id="${p.id}" data-status="${p.status}">
+      <div class="card-header">
+        <div class="card-title">${p.title}</div>
+        ${badgeHTML(p.status)}
+      </div>
+      <div class="card-desc">${p.desc}</div>
+      <div class="card-tags">${tags}</div>
+      <div class="card-footer">
+        <span class="card-date">${p.date || ''}</span>
+        <div class="card-links">
+          ${ghBtn}${demoBtn}
+          <button class="card-delete" title="Delete project" onclick="deleteProject('${p.id}')">🗑</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderProjects() {
+  const projects = loadProjects();
+  const grid = document.getElementById('projects-grid');
+  const filtered = currentFilter === 'all' ? projects : projects.filter(p => p.status === currentFilter);
+
+  document.getElementById('project-count').textContent = `(${projects.length})`;
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div class="empty-state"><div class="big">📂</div>No projects in this category yet.<br>Click <strong>+ Add Project</strong> to add one!</div>`;
+    return;
+  }
+  grid.innerHTML = filtered.map(cardHTML).join('');
+}
+
+// ── Delete ─────────────────────────────────────────────────────────────────
+function deleteProject(id) {
+  if (!confirm('Remove this project from your portfolio?')) return;
+  const projects = loadProjects().filter(p => p.id !== id);
+  saveProjects(projects);
+  renderProjects();
+  showToast('Project removed.');
+}
+
+// ── Filter buttons ─────────────────────────────────────────────────────────
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    renderProjects();
+  });
+});
+
+// ── Modal ──────────────────────────────────────────────────────────────────
+const overlay   = document.getElementById('modal-overlay');
+const openBtn   = document.getElementById('addBtn');
+const closeBtn  = document.getElementById('closeModal');
+
+function openModal()  { overlay.classList.add('open');    document.body.style.overflow='hidden'; }
+function closeModal() { overlay.classList.remove('open'); document.body.style.overflow='';       }
+
+openBtn.addEventListener('click', openModal);
+closeBtn.addEventListener('click', closeModal);
+overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+
+// ── Form submit ────────────────────────────────────────────────────────────
+document.getElementById('projectForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const title  = document.getElementById('f-title').value.trim();
+  const desc   = document.getElementById('f-desc').value.trim();
+  const tags   = document.getElementById('f-tags').value.split(',').map(t => t.trim()).filter(Boolean);
+  const status = document.getElementById('f-status').value;
+  const date   = document.getElementById('f-date').value.trim();
+  const github = document.getElementById('f-github').value.trim();
+  const demo   = document.getElementById('f-demo').value.trim();
+
+  const newProject = {
+    id: 'p_' + Date.now(),
+    title, desc, tags, status, date, github, demo
+  };
+
+  const projects = loadProjects();
+  projects.unshift(newProject); // add to top
+  saveProjects(projects);
+
+  // Reset form
+  document.getElementById('projectForm').reset();
+  closeModal();
+  currentFilter = 'all';
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.filter === 'all'));
+  renderProjects();
+  showToast('🎉 Project added successfully!');
+});
+
+// ── Toast ──────────────────────────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ── Init ───────────────────────────────────────────────────────────────────
+renderProjects();
+</script>
+</body>
+</html>
