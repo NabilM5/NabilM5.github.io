@@ -437,6 +437,16 @@ const PROJECTS = [
     date: '2024',
     github: '',
     demo: ''
+  },
+  {
+    id: 'p9',
+    title: 'Detection of AI-Generated Text',
+    desc: 'Seminar research project (HSE University, 2026) comparing Classical ML vs Neural Networks for binary classification of human vs AI-generated text. Grounded in two research papers: "Hidden Holes" (persistent homology / perforation metric shows human text has higher topological complexity than AI text) and Gromov\'s "Spot the Bot" (language as a self-organised critical system — Hausdorff dimension + entropy-complexity achieves 93–97% accuracy without neural networks). Pipeline: data collection from HC3, TuringBench & RAID datasets → TF-IDF baseline (expected weak) → fastText + LSTM (recommended strong baseline, captures local context) → GRU vs LSTM comparative experiment → TinyBERT fine-tuning → Topological Data Analysis (Vietoris-Rips complexes, Betti numbers). Novel output: an ensemble confidence score (soft label) combining model probability, topological perforation metric, and linguistic features — enabling mixed-content detection rather than hard binary labels.',
+    tags: ['Python','BERT','TinyBERT','LSTM','GRU','fastText','scikit-learn','TF-IDF','SVM','NLP','Transformers','PyTorch','TDA','Persistent Homology','Hugging Face'],
+    status: 'planned',
+    date: '2026',
+    github: '',
+    demo: ''
   }
 ];
 // ═══════════════════════════════════════════════════════════════════════════
