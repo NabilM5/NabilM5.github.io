@@ -738,6 +738,176 @@ const PROJECTS = [
     }
   },
   {
+    id: 'p10',
+    title: 'AI Task Assistant (Telegram + LLM)',
+    desc: 'Intelligent Telegram bot that manages tasks in TickTick using natural language. Powered by DeepSeek LLM for intent understanding and FAISS + NVIDIA embeddings for semantic search — reducing API costs by caching frequent queries. Built as a Fast MVP for the HSE Data Science course.',
+    tags: ['Python','Telegram Bot','LLM','DeepSeek','FAISS','TickTick API','RAG','NLP'],
+    status: 'completed',
+    date: '2026',
+    github: '', demo: '',
+    details: {
+      overview: 'A production-ready AI assistant that integrates Telegram, a large language model (DeepSeek), and the TickTick task management API. Users send natural language messages ("add a meeting tomorrow at 3pm") and the bot parses intent, extracts entities, and creates or queries tasks automatically. Built as an MVP for the HSE "Fast MVP in Data Science" course.',
+      sections: [
+        { title: 'What I Built', items: [
+          'Telegram bot interface: receives messages, handles commands, sends formatted responses',
+          'LLM integration (DeepSeek): natural language → structured task parameters via prompt engineering',
+          'TickTick API integration: create, list, update, and complete tasks programmatically',
+          'FAISS + NVIDIA embeddings: semantic caching layer to avoid redundant LLM calls for similar queries',
+          'Security layer: OAuth authentication only, pattern detection for sensitive data, no credential logging',
+        ]},
+        { title: 'Technical Approach', items: [
+          'System prompt aligned precisely with real TickTick API capabilities — avoids hallucinated tool calls',
+          'FAISS vector store for semantic deduplication: similar queries resolved from cache, not LLM',
+          'Cost optimisation: 1000 requests ≈ $0.50 with DeepSeek; FAISS layer reduces that further',
+          'Reliability: retry logic, error handling, structured JSON output from LLM for reliable parsing',
+        ]},
+        { title: 'Results', items: [
+          'Fully functional end-to-end MVP: natural language → task created in TickTick in < 2 seconds',
+          'Demonstrated in screencast video as course deliverable (March 2026)',
+          'Semantic caching reduces redundant LLM calls significantly for repeated task types',
+          'Presented scaling roadmap: multi-user support, monitoring, OAuth security hardening',
+        ]},
+      ]
+    }
+  },
+  {
+    id: 'p11',
+    title: 'Hybrid Genetic Algorithm for CVRP',
+    desc: 'Research implementation of a Hybrid Genetic Algorithm (GA + 2-opt local search) for the Capacitated Vehicle Routing Problem (CVRP). Benchmarked on CVRPLIB datasets (E, F, M, P sets) with gap analysis vs. known optimal solutions. Presented as Applied AI Models research at HSE.',
+    tags: ['Python','Genetic Algorithm','Metaheuristics','Optimization','Operations Research','NumPy','Matplotlib','Scipy'],
+    status: 'completed',
+    date: '2026',
+    github: '', demo: '',
+    details: {
+      overview: 'A research project implementing a Hybrid Genetic Algorithm for the Capacitated Vehicle Routing Problem (CVRP) — an NP-hard combinatorial optimisation problem where a fleet of vehicles must serve customers with minimum total distance while respecting vehicle capacity constraints. Benchmarked against known optimal solutions from CVRPLIB.',
+      sections: [
+        { title: 'What I Built', items: [
+          'Hybrid GA: tournament selection + order crossover (OX) + swap mutation + periodic 2-opt local search',
+          'CVRP instance parser: reads standard .vrp files from CVRPLIB sets E, F, M, P',
+          'Benchmark suite: automated runs across all instances with gap % vs. optimal computation',
+          'Visualisation: route plots, convergence curves, runtime vs. instance size analysis',
+          'Research report (PDF) with algorithm analysis and results comparison',
+        ]},
+        { title: 'Algorithm Design', items: [
+          'Representation: chromosome = list of routes, each route a list of customer indices',
+          'Population size: 50 · Generations: 200 · Crossover rate: 0.8 · Mutation rate: 0.1',
+          '2-opt local search applied every N generations to escape local optima',
+          'Feasibility repair: routes violating capacity constraints are split automatically',
+          'Stopping criterion: fixed generations with best-solution tracking across the run',
+        ]},
+        { title: 'Results', items: [
+          'Successfully solved CVRPLIB instances across E, F, M, P benchmark sets',
+          'Gap analysis vs. optimal: computed and visualised per instance and per dataset',
+          'Demonstrated that 2-opt local search hybrid significantly improves pure GA results',
+          'Presented as Applied AI Models research at HSE (PDF + PPTX deliverables)',
+        ]},
+      ]
+    }
+  },
+  {
+    id: 'p12',
+    title: 'Recommendation System — LightGBM LambdaRank',
+    desc: 'Two-stage music recommender: multi-source candidate generation (SasRec-I2I + LightFM-I2I) followed by a LightGBM LambdaRank re-ranker with 24 engineered features across session state, content match, cross-source ranking, and HSTU signals. Includes A/B testing analysis. HSE Recommendation Systems course, Spring 2026.',
+    tags: ['Python','LightGBM','LambdaRank','Recommendation Systems','SasRec','HSTU','A/B Testing','Feature Engineering','Redis'],
+    status: 'completed',
+    date: '2026',
+    github: '', demo: '',
+    details: {
+      overview: 'A two-stage music recommendation system built for the HSE Recommendation Systems course (Spring 2026). Replaces a static HSTU recommender with a learning-to-rank pipeline: a multi-source candidate generator followed by a LightGBM LambdaRank model. Features a confidence gate that only overrides the baseline when the model is sufficiently certain — minimising risk while capturing upside.',
+      sections: [
+        { title: 'What I Built', items: [
+          'Candidate generator: user\'s last 10 plays → top-10 I2I neighbours from SasRec-I2I and LightFM-I2I → deduplicated pool of ≤ 50 candidates',
+          'Feature engineering: 24 features across 4 buckets (session state, content match, cross-source ranking, HSTU + popularity)',
+          'LightGBM LambdaRank model: trained on control logs with positive = accepted candidate (listen time ≥ 0.7)',
+          'Confidence gate: re-ranker overrides baseline only when margin exceeds threshold — asymmetric risk profile',
+          'A/B testing analysis (analyze_ab.py): compares re-ranker vs. SasRec-I2I baseline on key metrics',
+        ]},
+        { title: 'Feature Engineering (24 features)', items: [
+          'Session state: hist_len, avg_time, last_time, good_frac, skip_frac, unique_artists',
+          'Content match: same_artist_last, genre_jaccard_liked, mood_match_count, year_dist, artist_fans_log',
+          'Cross-source ranking: sasrec_hits, lfm_hits, best_rr, weighted_rr, source_agreement per anchor',
+          'HSTU signals: hstu_rank_inv, hstu_present (offline asset reused as ranking features)',
+        ]},
+        { title: 'Results', items: [
+          'Two-stage pipeline improves ranking quality over SasRec-I2I baseline on acceptance rate',
+          'Confidence gate design: small cost when model is wrong, large gain when model is right',
+          'Comprehensive report with abstract, methodology, feature descriptions, and A/B analysis',
+          'Demonstrates real-world RecSys engineering: Redis-backed candidate retrieval, offline training, online serving logic',
+        ]},
+      ]
+    }
+  },
+  {
+    id: 'p13',
+    title: 'Diffusion Models — Conditional Image Generation',
+    desc: 'Implementation and training of a DDPM (Denoising Diffusion Probabilistic Model) for conditional image generation on MNIST. Covers forward diffusion process, noise scheduling, UNet denoising architecture, and class-conditional generation. HSE Project Seminar Homework L12.',
+    tags: ['Python','PyTorch','Diffusion Models','DDPM','UNet','Computer Vision','Deep Learning','MNIST'],
+    status: 'completed',
+    date: '2026',
+    github: '', demo: '',
+    details: {
+      overview: 'A from-scratch implementation of DDPM (Denoising Diffusion Probabilistic Models) for the HSE Project Seminar course. Covers the complete diffusion pipeline: forward process (gradually adding noise), reverse process (learning to denoise), and conditional generation using class labels. Trained on MNIST with full training logs saved.',
+      sections: [
+        { title: 'What I Built', items: [
+          'Forward diffusion process: Gaussian noise schedule over T timesteps, closed-form sampling at any t',
+          'UNet denoising network: encoder-decoder with skip connections, timestep and class conditioning',
+          'Training loop: noise prediction objective (ε-prediction), AdamW optimiser, cosine noise schedule',
+          'Conditional generation: class-conditional denoising enables generating specific digit classes',
+          'Evaluation: visual inspection of generated samples, training loss curves, reproducible seeds',
+        ]},
+        { title: 'Technical Approach', items: [
+          'DDPM paper (Ho et al.) implementation in PyTorch from first principles',
+          'Noise schedule: linear beta schedule, precomputed α, ᾱ values for efficient training',
+          'UNet architecture: time embedding via sinusoidal positional encoding, class embedding via lookup',
+          'Training on MNIST (28×28): ddpm-mnist-28 checkpoint saved with training logs',
+          'Reproducibility: fixed random seeds for all PyTorch and NumPy operations',
+        ]},
+        { title: 'Results', items: [
+          'Successfully trained DDPM on MNIST — model generates recognisable handwritten digits',
+          'Conditional generation works: specifying class 0–9 steers generation toward correct digit',
+          'Training logs and model checkpoint saved in ddpm-mnist-28/logs/',
+          'Demonstrates understanding of score-based generative models and modern deep learning',
+        ]},
+      ]
+    }
+  },
+  {
+    id: 'p14',
+    title: 'Bypass Dashboard',
+    desc: 'Local web dashboard (Flask, localhost:5000) for managing two censorship-bypass tools — Tor and NaïveProxy — through a unified UI. Features live process control, connection testing, circuit inspection, config editor, and a tools reference library. Built as a practical privacy/security utility.',
+    tags: ['Python','Flask','Tor','NaïveProxy','SOCKS5','Privacy','Cybersecurity','Networking'],
+    status: 'completed',
+    date: '2026',
+    github: '', demo: '',
+    details: {
+      overview: 'A self-hosted web dashboard (runs on localhost:5000) that gives a unified interface for controlling two powerful censorship-bypass tools: Tor (onion routing through three international relays) and NaïveProxy (traffic that looks like normal Chrome HTTPS, defeating Deep Packet Inspection). Inspired by the awesome-anti-censorship project. Useful for users in countries where internet access is restricted.',
+      sections: [
+        { title: 'What I Built', items: [
+          'Tor Status panel: real-time daemon status, exit IP display, circuit viewer, New Identity / NEWNYM signal button',
+          'NaïveProxy panel: start/stop process, JSON config editor (listen address, proxy URL, socks5-server chaining), live log viewer',
+          'Proxy Manager: list of proxy endpoints with toggle on/off and quick-test per proxy',
+          'Test Connection tab: send a real HTTP request through any SOCKS5 proxy and measure latency with pass/fail result',
+          'Tools Library: reference guide for 8 anti-censorship tools with setup instructions',
+          'start.sh / start.bat scripts: auto-install Python dependencies and launch the Flask server',
+        ]},
+        { title: 'Technical Approach', items: [
+          'Backend: Python Flask serving a REST API for process management (subprocess), Tor control protocol (stem library), and config read/write',
+          'Tor integration: communicates via the Tor control port (9051) to request new circuits, fetch exit node info, and watch daemon status',
+          'NaïveProxy integration: manages the naiveproxy binary as a subprocess, streams stdout/stderr to the live log viewer via SSE',
+          'Config management: reads and writes naive-config.json; supports advanced chaining (NaïveProxy over Tor via socks5-server field)',
+          'Frontend: vanilla JS dashboard with real-time status polling and log streaming',
+        ]},
+        { title: 'Key Features', items: [
+          'Two bypass modes: Tor (anonymity, three-relay chain) and NaïveProxy (speed + DPI evasion, VPS-based)',
+          'Double bypass: NaïveProxy over Tor config — most resilient setup when both direct Tor and direct VPS are blocked',
+          'Connection tester: verifies any SOCKS5 proxy actually works against a target URL before browser config',
+          'New Identity: one-click Tor circuit refresh to get a different exit IP if a site blocks Tor nodes',
+          'Full user guide written covering installation, worked examples, troubleshooting, and privacy reminders',
+        ]},
+      ]
+    }
+  },
+  {
     id: 'p9',
     title: 'Detection of AI-Generated Text',
     desc: 'Seminar research project (HSE University, 2026) comparing Classical ML vs Neural Networks for binary classification of human vs AI-generated text. Grounded in two research papers: "Hidden Holes" (persistent homology / perforation metric shows human text has higher topological complexity than AI text) and Gromov\'s "Spot the Bot" (language as a self-organised critical system — Hausdorff dimension + entropy-complexity achieves 93–97% accuracy without neural networks). Pipeline: data collection from HC3, TuringBench & RAID datasets → TF-IDF baseline (expected weak) → fastText + LSTM (recommended strong baseline, captures local context) → GRU vs LSTM comparative experiment → TinyBERT fine-tuning → Topological Data Analysis (Vietoris-Rips complexes, Betti numbers). Novel output: an ensemble confidence score (soft label) combining model probability, topological perforation metric, and linguistic features — enabling mixed-content detection rather than hard binary labels.',
