@@ -908,6 +908,145 @@ const PROJECTS = [
     }
   },
   {
+    id: 'p15',
+    title: 'Real-Time Transcription + WebSocket UI',
+    desc: 'Real-time speech transcription pipeline with a browser UI. Captures audio from microphone or system output (BlackHole), runs Whisper ASR, optionally translates and corrects via OpenAI, and streams results to the browser over WebSocket — all running locally.',
+    tags: ['Python','FastAPI','WebSocket','Whisper','PyTorch','sounddevice','VAD','OpenAI'],
+    status: 'completed',
+    date: '2026',
+    github: 'https://github.com/NabilM5/Real-Time_WebSocket_UI', demo: '',
+    details: {
+      overview: 'A self-hosted real-time transcription system that captures live audio, transcribes it with OpenAI Whisper, and streams the resulting text to a browser UI over a WebSocket connection. Supports microphone or system-audio capture (via BlackHole/Loopback), multiple Whisper model sizes, optional translation to other languages, and an optional OpenAI-powered correction layer for cleaner output.',
+      sections: [
+        { title: 'What I Built', items: [
+          'FastAPI backend (app/main.py) that wires audio capture, pipeline, and WebSocket broadcast together',
+          'Pipeline orchestrator (app/pipeline.py) chaining ASR → optional translation → optional correction stages',
+          'Audio capture (audio/capture.py) using sounddevice — supports microphone and system audio via BlackHole 2ch',
+          'RMS-based voice activity gate (processing/vad.py) and chunked queue manager for streaming audio into Whisper',
+          'Speaker diarization stub (processing/diarization.py) and a browser UI (ui/web/index.html) that updates live',
+          'Configuration via config.yaml: audio source, ASR model size, language, VAD, translation targets, server host/port',
+        ]},
+        { title: 'Technical Approach', items: [
+          'Pipeline: Audio → Queue → Whisper ASR → [optional translation via deep-translator] → [optional OpenAI correction] → WebSocket → browser',
+          'Whisper engine wrapper supports base/small/medium/large model sizes with automatic language detection or manual override',
+          'WebSocket broadcast lets multiple browser clients listen to the same live transcription session',
+          'Optional translation targets (e.g. translate Russian speech to English text) via deep-translator',
+          'Optional correction layer calls the OpenAI API to polish punctuation and grammar before streaming',
+        ]},
+        { title: 'Results', items: [
+          'Working end-to-end build: speak → transcription appears live in the browser at http://localhost:8000',
+          'Successor to the earlier CLI-only transcript_real_time prototype — adds WebSocket layer and browser UI',
+          'Runs entirely locally except for the optional OpenAI correction stage (toggle via config)',
+          'Reusable architecture: ASR engine can be swapped (Whisper → faster-whisper / whisper.cpp) without touching the rest of the pipeline',
+        ]},
+      ]
+    }
+  },
+  {
+    id: 'p16',
+    title: 'AgentMemory — Long-Term Memory for Claude Code',
+    desc: 'Local-first long-term memory system for Claude Code sessions. Records short notes during a session, compresses them via a local Ollama LLM, and auto-injects the summary into the project\'s CLAUDE.md — so Claude re-reads context on every session start without manual re-explanation.',
+    tags: ['Python','CLI','Ollama','LLM','Local-First','n8n','Telegram'],
+    status: 'completed',
+    date: '2026',
+    github: 'https://github.com/NabilM5/External_memory_for_chat_history', demo: '',
+    details: {
+      overview: 'A tool that gives Claude Code persistent project memory. During a session the user records short notes — file changes, decisions, errors — via a `mem` CLI. At end of session a local Ollama model compresses those notes into a structured summary, which is then injected into the project\'s CLAUDE.md. Claude Code reads CLAUDE.md on every session start, so the next session begins with full context restored. No cloud calls, no API costs — everything runs locally.',
+      sections: [
+        { title: 'What I Built', items: [
+          '`mem` CLI (mem.py): unified entrypoint for record / full / stats subcommands — no Python deps (stdlib only)',
+          'Memory recorder (memory_recorder.py): appends raw entries to per-project JSON files under .agent_memory/',
+          'Memory compressor (memory_compressor.py): calls a local Ollama model (llama3.2 / qwen2.5) to produce compressed summaries',
+          'Memory injector (memory_injector.py): writes the compressed summary into the project\'s CLAUDE.md',
+          'Stats reporter (memory_report.py) for inspecting recorded entries via `mem stats`',
+          'Optional n8n + Telegram automation (n8n_workflow.json + N8N_TELEGRAM_SETUP.md) for remote recording',
+        ]},
+        { title: 'Technical Approach', items: [
+          'Per-project storage: each project gets its own .agent_memory/{files,decisions,events,compressed_memory}.json',
+          'Local LLM via Ollama HTTP API (urllib only — no requests / langchain dependency)',
+          'Model is configurable via OLLAMA_MODEL env var; defaults to llama3.2 for speed',
+          'Originally used the Claude API for compression; migrated to local Ollama to eliminate API cost and latency',
+          'Global zsh alias makes `mem` callable from any project directory',
+        ]},
+        { title: 'Results', items: [
+          'Working tool in active daily use — replaces re-explaining project context at every Claude Code session start',
+          'Zero ongoing API cost: all compression runs locally on Ollama',
+          'Stdlib-only Python — installs in seconds, no virtualenv required',
+          'Generalises to any agent that reads a project-level instruction file (CLAUDE.md, AGENTS.md, etc.)',
+        ]},
+      ]
+    }
+  },
+  {
+    id: 'p17',
+    title: 'CV & Project-Plan Generators (docx)',
+    desc: 'Node.js scripts that generate CVs (EN/RU/AI-ML-focused) and the AI Detection project plan as polished Word documents using the docx library. Shared teal + dark-navy design system across all outputs, with PDF export via headless LibreOffice.',
+    tags: ['Node.js','docx','JavaScript','LibreOffice','PDF','Document Generation'],
+    status: 'completed',
+    date: '2026',
+    github: 'https://github.com/NabilM5/cv-generators', demo: '',
+    details: {
+      overview: 'A small toolkit of Node.js scripts that produce professional-quality Word documents from code — used to keep my CVs and the AI Detection project plan in sync across English and Russian versions. Each generator script inlines the document content as JS arrays/strings, so updating a CV is just editing a JS file and re-running. The docx → pdf conversion is handled by headless LibreOffice for repeatable PDF output.',
+      sections: [
+        { title: 'What I Built', items: [
+          'generate_cv.js — main CV in English',
+          'generate_cv_ru.js — Russian-language CV',
+          'generate_cv_aiml_ru.js — AI/ML-focused CV in Russian',
+          'generate_ai_detection_plan.js — AI Detection project plan (Russian, full research plan)',
+          'generate_ai_detection_plan_en.js — AI Detection project plan (English)',
+          'Shared design system: teal (#007A8A) + dark-navy (#1A2A3A) palette, A4 geometry, custom tables and headings',
+        ]},
+        { title: 'Technical Approach', items: [
+          'Built on the npm `docx` package — produces real .docx files (not HTML-to-PDF) so styles survive in Word/Pages',
+          'Each script is self-contained: content lives as JS arrays/strings inlined in the file',
+          'Output written via fs.writeFileSync to the current working directory — runs from anywhere',
+          'PDF export pipeline: `soffice --headless --convert-to pdf` for deterministic, scriptable conversion',
+          'Same design tokens reused across CVs and the project plan for consistent personal branding',
+        ]},
+        { title: 'Results', items: [
+          'Five working generators producing the user-facing artefacts attached to the AI Detection card on this site',
+          'docx + pdf for each CV variant (EN, RU, AI/ML-focused RU) plus the AI Detection plan in both languages',
+          'Re-runnable: edit any generate_*.js, run `node scripts/generate_X.js`, regenerate PDF — under 30 seconds end-to-end',
+          'Eliminates Word-template drift across language versions — one source of truth per document type',
+        ]},
+      ]
+    }
+  },
+  {
+    id: 'p18',
+    title: 'Real-Time Transcription CLI (Prototype)',
+    desc: 'CLI-only prototype of the real-time transcription pipeline. Captures audio (microphone + system), runs Whisper ASR, and optionally translates the result. Architectural foundation later extended into the Real-Time WebSocket UI project with a browser interface.',
+    tags: ['Python','Whisper','PyTorch','sounddevice','CLI','ASR'],
+    status: 'completed',
+    date: '2025',
+    github: 'https://github.com/NabilM5/transcript_real_time', demo: '',
+    details: {
+      overview: 'The earlier CLI-only iteration of my real-time transcription work. Same overall idea as Real-Time_WebSocket_UI — capture audio, transcribe with Whisper, optionally translate — but without the WebSocket layer or browser UI. Designed pipeline: Audio (Mic + System) → Chunking (1–2s overlap) → ASR (Whisper) → [Optional Translation] → CLI output. Served as the architectural sketch and proof-of-concept that the successor project then built on.',
+      sections: [
+        { title: 'What I Built', items: [
+          'Pipeline modules (app/main.py, app/pipeline.py, app/config.py) wiring audio → ASR → translation → output',
+          'Audio capture module (audio/capture.py) — microphone and system audio via sounddevice',
+          'Whisper engine wrapper (asr/whisper_engine.py) with configurable model size and language',
+          'Translation layer (translation/translator.py, translation/api_mt.py) — deep-translator + remote MT API support',
+          'Queue manager (processing/queue_manager.py) for chunked audio streaming into Whisper',
+          'CLI formatter (output/formatter.py) and architecture sketch (YAML config + architecture.md design doc)',
+        ]},
+        { title: 'Technical Approach', items: [
+          'Chunked audio streaming with 1–2 second overlap between chunks for boundary-word recovery',
+          'Whisper ASR run on each chunk; translation toggled per language target in config',
+          'Modular layout (app / audio / processing / asr / translation / output) designed for swap-in alternatives',
+          'README + architecture.md document the planned full layout even though some files (vad.py, websocket_server.py, ui/web/) were left for the successor project',
+        ]},
+        { title: 'Results & Legacy', items: [
+          'Working transcription proof-of-concept at the CLI level — proved the pipeline shape worked',
+          'Identified the missing pieces (VAD, WebSocket, browser UI) needed for a real product experience',
+          'Architecture inherited directly by the successor Real-Time_WebSocket_UI project — same module names and responsibilities',
+          'Useful reference for understanding why the WebSocket UI version is structured the way it is',
+        ]},
+      ]
+    }
+  },
+  {
     id: 'p9',
     title: 'Detection of AI-Generated Text',
     desc: 'Seminar research project (HSE University, 2026) comparing Classical ML vs Neural Networks for binary classification of human vs AI-generated text. Grounded in two research papers: "Hidden Holes" (persistent homology / perforation metric shows human text has higher topological complexity than AI text) and Gromov\'s "Spot the Bot" (language as a self-organised critical system — Hausdorff dimension + entropy-complexity achieves 93–97% accuracy without neural networks). Pipeline: data collection from HC3, TuringBench & RAID datasets → TF-IDF baseline (expected weak) → fastText + LSTM (recommended strong baseline, captures local context) → GRU vs LSTM comparative experiment → TinyBERT fine-tuning → Topological Data Analysis (Vietoris-Rips complexes, Betti numbers). Novel output: an ensemble confidence score (soft label) combining model probability, topological perforation metric, and linguistic features — enabling mixed-content detection rather than hard binary labels.',
