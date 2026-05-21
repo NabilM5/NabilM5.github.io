@@ -1083,6 +1083,41 @@ const PROJECTS = [
       planEN: 'AI_Detection_Project_Plan_EN.pdf',
       planRU: 'AI_Detection_Project_Plan.pdf'
     }
+  },
+  {
+    id: 'p19',
+    title: 'A/B Test Sensitivity — CUPED & Post-Stratification',
+    desc: 'Coursework solution demonstrating two variance-reduction techniques for A/B testing on an 8000-user revenue dataset: CUPED (Controlled-experiment Using Pre-Experiment Data) and post-stratification by user segment. The plain t-test on raw revenue fails to detect the treatment effect (p = 0.39), but CUPED with pre-experiment revenue as the covariate cuts variance enough to reject the null (p = 0.044) and produces a 95% CI lower bound of 0.13. Notebook covers seven graded questions: sample-size reduction formula 1/(1-R²), Pearson correlation between pre/post revenue, manual CUPED transform, post-stratified test on the `is_whale` segment, and the degenerate X=Y case where the metric collapses to a constant.',
+    tags: ['Python','Pandas','NumPy','SciPy','A/B Testing','CUPED','Statistics','Hypothesis Testing','Jupyter'],
+    status: 'completed',
+    date: '2026',
+    github: '', demo: '',
+    details: {
+      overview: 'Homework assignment from a Russian-language data science course (Занятие 4 — Способы повышения чувствительности АБ-тестов) solved end-to-end in a Jupyter notebook. The dataset has 8000 users split into A/B groups with pre-experiment revenue, post-experiment revenue, and a whale flag. The task is to show why a naive t-test misses the effect, then recover statistical power using variance-reduction methods.',
+      sections: [
+        { title: 'What I Built', items: [
+          'Loaded and analysed an 8000-row dataset (user_id, group, pre_rev, post_rev, is_whale)',
+          'Implemented the CUPED transform manually: Y_cuped = Y − θ·(X − E[X]), with θ = Cov(X,Y)/Var(X)',
+          'Implemented post-stratification by `is_whale` — weighted means and within-stratum variances combined into a stratified z-test',
+          'Computed the 95% confidence interval for the absolute effect on the CUPED-adjusted metric',
+          'Demonstrated the degenerate case where using post_rev as its own covariate collapses the metric to a constant',
+        ]},
+        { title: 'Technical Approach', items: [
+          'Sample-size reduction theorem: required N becomes (1−R²) of the original — at R = 0.8 that is a 2.78× reduction',
+          'CUPED variance reduction relies on a high correlation between pre and post metrics — measured at 0.99 on this dataset',
+          'Post-stratification uses population-level stratum proportions as weights, not group-specific proportions, to avoid biasing the difference of means',
+          'Two-sided t-test with pooled variance for the CI; stratified z-test using sum of weighted within-stratum variances for the post-stratification question',
+          'Scipy stats (`ttest_ind`, `norm.cdf`, `t.ppf`) for all p-values and critical values',
+        ]},
+        { title: 'Results', items: [
+          'Plain t-test on raw post_rev: p = 0.3903 — cannot reject H₀',
+          'CUPED-adjusted t-test: p = 0.044 — rejects H₀ at α = 0.05',
+          'Post-stratified by is_whale: p = 0.068 — close to significance, weaker than CUPED here',
+          '95% CI lower bound for the absolute effect after CUPED: 0.13',
+          'Pearson correlation Corr(pre_rev, post_rev) = 0.99 — confirms CUPED was a good fit for this dataset',
+        ]},
+      ]
+    }
   }
 ];
 // ═══════════════════════════════════════════════════════════════════════════
